@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/DevNotes.Web/DevNotes.Web.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DevNotes.Tests/DevNotes.Tests.csproj" />
+  </Folder>
 </Solution>

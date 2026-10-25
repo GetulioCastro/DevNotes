@@ -76,13 +76,20 @@ Paralelizável após T-01: T-05, T-06 e T-11 (não dependem de T-02..T-04).
 
 #### T-01 — Fundação de dados e testes: EF Core + SQLite, migration inicial e projeto xUnit
 
-- **Status:** Pendente
+- **Status:** Concluído
 - **Complexidade:** Média
 - **Depende de:** nenhuma
 - **Implementa:** — (tarefa preparatória)
 - **Valida:** — (preparatória; inclui verificação parcial e concreta de CA-27 — escuta local)
 - **Decisões base:** ADR-002, ADR-004
 - **Portas de mão única:** `migration inicial — schema Nota/Categoria/Tecnologia (N:M) + índices`; `configuração — provider SQLite e caminho do arquivo do banco`
+
+**Evidências do fechamento (Gate 29 — 2026-10-25):**
+
+- Build verde (`dotnet build DevNotes.slnx`, 0 warnings/0 erros) e suíte **6/6 aprovada** (`dotnet test tests/DevNotes.Tests`) — SQLite in-memory e migration contra arquivo temporário, com DDL conferindo `ON DELETE RESTRICT` nas 3 FKs, ausência de `ON DELETE CASCADE`, PK composta e índices `IX_Notas_Titulo`, `IX_Notas_Estado`, `IX_Notas_CategoriaId`, `IX_NotasTecnologias_TecnologiaId`.
+- Migration `Inicial` (`Data/Migrations/20261025211545_Inicial.cs`) aplicada em `App_Data/devnotes.db`; seed idempotente comprovada em runtime real: boot #2 inseriu 2 categorias + 3 tecnologias e escutou; boot #3 reconsultou sem re-inserir. Zero notas (RN-07).
+- **CA-27 verificado** na configuração e na execução local: `launchSettings.json` com bindings somente `http://localhost:5054` / `https://localhost:7014`, confirmado em `Now listening on: http://localhost:5054` nos três boots (RN-16, ADR-004).
+- Arquivo do banco fora do git: `App_Data/`, `*.db`, `*.db-shm`, `*.db-wal` em `.gitignore` (confirmado via `git status --ignored`). Localização definitiva registrada para o procedimento da T-11: `src/DevNotes.Web/App_Data/devnotes.db`.
 
 **Descrição:**
 

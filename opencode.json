@@ -1,0 +1,55 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "references": {
+    "leanwork-sdd": {
+      "path": "D:/Projetos/leanwork-sdd-v2",
+      "description": "Fonte oficial do pipeline SDD Leanwork v2.2.0 (somente leitura - skills, scripts de gate, templates e catalogo dotnet)"
+    }
+  },
+  "permission": {
+    "edit": "ask",
+    "external_directory": {
+      "D:/Projetos/leanwork-sdd-v2/**": "allow"
+    },
+    "bash": {
+      "*": "ask",
+      "python*": "deny",
+      "python3*": "deny",
+      "py *": "deny",
+      "git switch*": "deny",
+      "git checkout*": "deny",
+      "git add*": "deny",
+      "git rm*": "deny",
+      "git commit*": "deny",
+      "git merge*": "deny",
+      "git rebase*": "deny",
+      "git reset*": "deny",
+      "git revert*": "deny",
+      "git stash*": "deny",
+      "git push*": "deny",
+      "git pull*": "deny",
+      "git fetch*": "deny",
+      "git cherry-pick*": "deny",
+      "git apply*": "deny",
+      "git clean*": "deny",
+      "git tag*": "deny",
+      "git branch*": "deny",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git show*": "allow",
+      "git grep*": "allow",
+      "git remote -v*": "allow",
+      "git ls-files*": "allow",
+      "git rev-parse*": "allow",
+      "git describe*": "allow",
+      "git blame*": "allow",
+      "git shortlog*": "allow",
+      "git reflog*": "allow",
+      "git branch --list*": "allow",
+      "git branch -a*": "allow",
+      "git branch -r*": "allow"
+    }
+  }
+}

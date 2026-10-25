@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DevNotes.Web/DevNotes.Web.csproj" />
+  </Folder>
+</Solution>

@@ -123,7 +123,7 @@ Criar `tests/DevNotes.Tests` (xUnit) e incluí-lo no `DevNotes.slnx`. Instalar E
 
 #### T-02 — Nova nota com validação e listagem Admin mínima (primeira fatia vertical)
 
-- **Status:** Pendente
+- **Status:** Concluído
 - **Complexidade:** Média
 - **Depende de:** T-01
 - **Implementa:** RN-01, RN-02, RN-03, RN-04, RN-05, RN-06, RN-14, RN-18, RN-11, RN-17
@@ -131,6 +131,16 @@ Criar `tests/DevNotes.Tests` (xUnit) e incluí-lo no `DevNotes.slnx`. Instalar E
 - **Decisões base:** ADR-001 (camadas por pastas), ADR-002 (transação nota+classificações), ADR-004 (área Admin separada), ADR-005 (editor textarea)
 - **Telas:** UI-04 (`.default` modo criar, `.validacao`, `.enviando`, `.sucesso`), UI-03 (`.vazio`, `.default` mínima)
 - **Portas de mão única:** `rotas — criação da área `/Admin/Notas/*` (base da futura autorização por área, ADR-004)`
+
+**Evidências do fechamento (Gate 30 — 2026-10-28):**
+
+- **Aprovação:** parecer do reviewer-leanwork **Aprovado com ressalvas** — zero findings Bloqueantes (0 Bloqueante, 0 Importante, 2 Sugestões). Status `Concluída` autorizado pelo dono na base da validação humana prévia no navegador (criação, listagem, rascunho por padrão, categoria e tecnologias persistidas).
+- **Build e suíte:** `dotnet build DevNotes.slnx` com 0 avisos/0 erros; suíte **28/28 aprovada** (unit `NoteServiceTests` + integração `CriarNotaWebTests` com `WebApplicationFactory`, cobrindo CA-01..CA-05 e CA-08 com asserções diretas de estado no banco).
+- **Sensor de discriminação:** executado isoladamente em cópia scratch fora da worktree (cópia sem `.git`/`bin`/`obj`/`App_Data`/banco). Mutação única `Estado = NotaEstado.Rascunho → Publicada` (implementação errada provável de RN-13) — **mutante morto**: `CA_01_CriaNotaValidaComRelacoesComoRascunho` falhou na asserção de estado. Worktree original comprovadamente intacta após a execução. Suíte discrimina o comportamento persistido.
+- **R-01 (Sugestão aceita — registro para T-09):** resumo da listagem Admin derivado por `Substring(0,160)` do Markdown cru (`NoteService.ListarAsync`) — aceito como textual provisório, sem alteração na implementação atual. Na T-09, a derivação do `ResumoMarkdownSeguro` (texto simples, sem tags, sem interpretação de markup — decisão da SPEC-UI) deve controlar/regulamentar este caminho.
+- **R-02 (Sugestão aceita):** componentes reutilizáveis da SPEC-UI (`MultiSelectTecnologias`, `FlashMensagem`, `CampoValidacao`, `ListaVazia`) permanecem inlineados nesta etapa; extração de parciais apenas quando houver duplicação concreta em tarefas futuras.
+- **R-03 (trailer de commit):** commit da fatia será realizado manualmente pelo dono (VS Code) — trailer `Refs: T-02` não verificável por restrição de git somente consulta; verificação fica a cargo do próprio dono no momento do commit.
+- **Pendência de interface (não bloqueante, registro para a Fase 3):** filtro por estado da UI-03 (todas / rascunhos / publicadas — especificado na SPEC-UI) **sem implementação neste fechamento**; a conclusão da listagem com filtro e ações por item fica para a **T-07**, sem abrir tarefa adicional.
 
 **Descrição:**
 

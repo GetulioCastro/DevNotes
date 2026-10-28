@@ -1,10 +1,13 @@
 using DevNotes.Web.Data;
+using DevNotes.Web.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<NoteService>();
 
 builder.Services.AddDbContext<DevNotesDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DevNotes")));
@@ -42,3 +45,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
+
+public partial class Program;

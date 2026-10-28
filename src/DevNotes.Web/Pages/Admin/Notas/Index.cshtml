@@ -1,0 +1,64 @@
+@page
+@model DevNotes.Web.Pages.Admin.Notas.IndexModel
+@{
+    ViewData["Title"] = "Notas — Admin";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Notas</h1>
+    <a class="btn btn-primary" asp-page="./Criar">Criar nota</a>
+</div>
+
+<nav class="nav nav-underline mb-4" aria-label="Área Admin">
+    <a class="nav-link active" aria-current="page" asp-page="./Index">Notas</a>
+    <span class="nav-link disabled" aria-disabled="true">Classificações</span>
+</nav>
+
+@if (TempData["Flash"] is string flash)
+{
+    <div class="alert alert-success" role="alert">@flash</div>
+}
+
+@if (Model.Notas.Count == 0)
+{
+    <div class="text-center py-5">
+        <h2 class="h4">Nenhuma nota ainda</h2>
+        <p class="text-body-secondary">Seu acervo começa aqui.</p>
+        <a class="btn btn-primary" asp-page="./Criar">Criar primeira nota</a>
+    </div>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var nota in Model.Notas)
+        {
+            <li class="list-group-item">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <h2 class="h5 mb-0">@nota.Titulo</h2>
+                    <div class="d-flex align-items-center gap-1">
+                        @if (nota.Estado == NotaEstado.Publicada)
+                        {
+                            <span class="badge text-bg-success">Publicada</span>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-secondary">Rascunho</span>
+                        }
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-1 mt-1">
+                    <span class="badge text-bg-light border">@nota.CategoriaNome</span>
+                    @foreach (var tecnologia in nota.TecnologiasNomes)
+                    {
+                        <span class="badge text-bg-light border">@tecnologia</span>
+                    }
+                </div>
+                @if (!string.IsNullOrWhiteSpace(nota.Resumo))
+                {
+                    <p class="text-body-secondary mt-2 mb-1">@nota.Resumo@(nota.Resumo.Length >= NoteService.TamanhoResumo ? "…" : "")</p>
+                }
+                <small class="text-body-secondary">Atualizada em <time datetime="@nota.DataAtualizacao.ToString("o")">@nota.DataAtualizacao.ToString("g")</time></small>
+            </li>
+        }
+    </ul>
+}

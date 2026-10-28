@@ -1,0 +1,71 @@
+@page
+@model DevNotes.Web.Pages.Admin.Notas.CriarModel
+@{
+    ViewData["Title"] = "Nova nota — Admin";
+}
+
+<h1 class="mb-4">Nova nota</h1>
+
+<div asp-validation-summary="All" class="text-danger mb-3" role="alert"></div>
+
+<form method="post" id="form-nota">
+    <div class="mb-3">
+        <label asp-for="Entrada.Titulo" class="form-label">Título</label>
+        <input asp-for="Entrada.Titulo" class="form-control" maxlength="200" aria-describedby="contador-titulo" />
+        <div id="contador-titulo" class="form-text" aria-live="polite"><span id="contador-titulo-valor">0</span>/200</div>
+        <span asp-validation-for="Entrada.Titulo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Entrada.Conteudo" class="form-label">Conteúdo (Markdown)</label>
+        <textarea asp-for="Entrada.Conteudo" class="form-control font-monospace" rows="20"></textarea>
+        <span asp-validation-for="Entrada.Conteudo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Entrada.CategoriaId" class="form-label">Categoria</label>
+        <select asp-for="Entrada.CategoriaId" class="form-select" asp-items="Model.Categorias">
+            <option value="">— Selecione —</option>
+        </select>
+        @if (Model.Categorias.Count() == 0)
+        {
+            <p class="form-text">Nenhuma categoria cadastrada ainda — gerencie as classificações na área Admin.</p>
+        }
+        <span asp-validation-for="Entrada.CategoriaId" class="text-danger"></span>
+    </div>
+
+    <fieldset class="mb-3">
+        <legend class="form-label float-none w-100 mb-1">Tecnologias</legend>
+        @if (Model.Tecnologias.Count == 0)
+        {
+            <p class="form-text">Nenhuma tecnologia cadastrada ainda — gerencie as classificações na área Admin.</p>
+        }
+        @foreach (var tecnologia in Model.Tecnologias)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="Entrada.TecnologiasIds" value="@tecnologia.Id" id="tecnologia-@tecnologia.Id" checked="@Model.Entrada.TecnologiasIds.Contains(tecnologia.Id)" />
+                <label class="form-check-label" for="tecnologia-@tecnologia.Id">@tecnologia.Nome</label>
+            </div>
+        }
+        <span asp-validation-for="Entrada.TecnologiasIds" class="text-danger"></span>
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary" id="botao-salvar">Salvar</button>
+    <a class="btn btn-outline-secondary" asp-page="./Index">Voltar para listagem</a>
+</form>
+
+@section Scripts {
+    <script>
+        (function () {
+            var titulo = document.getElementById("Entrada_Titulo");
+            var contador = document.getElementById("contador-titulo-valor");
+            var atualizarContador = function () { contador.textContent = String(titulo.value.length); };
+            titulo.addEventListener("input", atualizarContador);
+            atualizarContador();
+
+            document.getElementById("form-nota").addEventListener("submit", function () {
+                document.getElementById("botao-salvar").disabled = true; // UI-04.enviando — previne envio duplo
+            });
+        })();
+    </script>
+}
